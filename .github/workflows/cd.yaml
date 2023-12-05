@@ -13,16 +13,16 @@ jobs:
 
   cd_wiki:
     name: Synchronise
-    runs-on: windows-2022
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/checkout@v4
         with:
           repository: 'warp-core/endless-sky.wiki'
-          path: 'wiki-repository/'
+          path: 'endless-sky.wiki/'
       - name: Synchronise
         run: |
-          copy /y 'wiki/*.md' 'wiki-repository/'
+          rsync -av wiki/ endless-sky.wiki/
           cd endless-sky.wiki
           git config --local user.name "GitHub Actions"
           git config --local user.email "actions@github.com"
