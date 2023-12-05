@@ -14,6 +14,8 @@ jobs:
   cd_wiki:
     name: Synchronise
     runs-on: ubuntu-latest
+    env:
+      WIKI_TOKEN: ${{ secrets.WIKI_TOKEN }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/checkout@v4
@@ -26,7 +28,7 @@ jobs:
           cd endless-sky.wiki
           git config --local user.name "GitHub Actions"
           git config --local user.email "actions@github.com"
-          git remote set-url origin "https://warp-core:{{ secrets.WIKI_TOKEN }}@github.com/warp-core/endless-sky.wiki.git"
+          git remote set-url origin "https://warp-core:$WIKI_TOKEN@github.com/warp-core/endless-sky.wiki.git"
           git add .
           git commit -m "Update"
           git push origin
