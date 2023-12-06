@@ -20,15 +20,16 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/checkout@v4
         with:
-          repository: 'warp-core/endless-sky.wiki'
-          path: 'endless-sky.wiki/'
+          repository: 'warp-core/endless-sky'
+          path: 'endless-sky/'
       - name: Synchronise
         run: |
-          rsync -av wiki/ endless-sky.wiki/
-          cd endless-sky.wiki
+          rsync -av wiki/ endless-sky/wiki/
+          cd endless-sky
           git config --local user.name "GitHub Actions"
           git config --local user.email "actions@github.com"
-          git remote set-url origin "https://$WIKI_TOKEN@github.com/warp-core/endless-sky.wiki.git"
+          git remote set-url origin "https://$WIKI_TOKEN@github.com/warp-core/endless-sky.git"
+          git checkout wiki-action-test
           git add .
           git commit -m "Update"
           git push origin
