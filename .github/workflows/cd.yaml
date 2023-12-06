@@ -29,7 +29,7 @@ jobs:
           cd endless-sky
           git config --local user.name "GitHub Actions"
           git config --local user.email "actions@github.com"
-          git remote set-url origin "https://$WIKI_TOKEN@github.com/warp-core/endless-sky.git"
+          git remote set-url origin "https://warp-core:$WIKI_TOKEN@github.com/warp-core/endless-sky.git"
           git add .
           git commit -m "Update"
           git push origin
