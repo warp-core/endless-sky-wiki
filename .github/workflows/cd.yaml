@@ -1,0 +1,47 @@
+name: CD
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'wiki/**.md'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
+jobs:
+
+  cd_wiki:
+    name: Synchronise wiki
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout this repository
+        uses: actions/checkout@v4
+        with:
+          path: 'endless-sky-wiki/'
+      - name: Checkout wiki
+        uses: actions/checkout@v4
+        with:
+          repository: 'warp-core/endless-sky.wiki'
+          path: 'endless-sky.wiki/'
+          persist-credentials: false
+      - name: Synchronise files
+        run: rsync -av endless-sky-wiki/wiki/ endless-sky.wiki/
+      - name: Commit changes
+        run: |
+          cd endless-sky.wiki
+          git config --local user.name "GitHub Actions"
+          git config --local user.email "actions@github.com"
+          git add .
+          git commit -m "Update" -m "${{ github.sha }}" -m "Triggered by ${{ github.actor }}"
+      - name: Push changes
+        env:
+          GH_TOKEN: ${{ secrets.WIKI_TOKEN }}
+        run: |
+          cd endless-sky.wiki
+          git remote set-url origin "https://${{ env.GH_TOKEN }}@github.com/warp-core/endless-sky.wiki"
+          git push origin
+        shell: bash
